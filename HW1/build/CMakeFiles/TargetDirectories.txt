@@ -1,0 +1,3 @@
+/home/xiangzhoubo/AP1400/HW1/build/CMakeFiles/main.dir
+/home/xiangzhoubo/AP1400/HW1/build/CMakeFiles/edit_cache.dir
+/home/xiangzhoubo/AP1400/HW1/build/CMakeFiles/rebuild_cache.dir
