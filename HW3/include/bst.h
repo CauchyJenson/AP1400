@@ -2,6 +2,7 @@
 #define BST_H
 #include<iostream>
 #include<functional>
+#include<iomanip>
 
 class BST
 {
@@ -33,5 +34,21 @@ public:
 	Node* right;
 };
 
+std::ostream& operator<<(std::ostream& os, const BST::Node& node);
+// == overload
+bool operator==(const BST::Node& node, int num);
+bool operator==(int num, const BST::Node& node);
+// < overload
+bool operator<(const BST::Node& node, int num);
+bool operator<(int num, const BST::Node& node);
+// > overload
+bool operator>(const BST::Node& node, int num);
+bool operator>(int num, const BST::Node& node);
+// <= overload
+bool operator<=(const BST::Node& node, int num);
+bool operator<=(int num, const BST::Node& node);
+// >= overload
+bool operator>=(const BST::Node& node, int num);
+bool operator>=(int num, const BST::Node& node);
 
 #endif //BST_H
