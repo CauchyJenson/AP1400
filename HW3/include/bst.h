@@ -3,6 +3,7 @@
 #include<iostream>
 #include<functional>
 #include<iomanip>
+#include<queue>
 
 class BST
 {
