@@ -37,6 +37,40 @@ bool operator>=(int num, const BST::Node& node){return num >= node.value;}
 
 
 // BST part
+
+// default constructor
+BST::BST(){this->root = nullptr;}
+
+// copy constructor
+static void copy(BST::Node* a, BST::Node* &b){
+    if(a){// a -> b
+        b = new BST::Node(a->value, nullptr, nullptr);
+        copy(a->left, b->left);
+        copy(a->right, b->right);
+    }
+    return;
+}
+BST::BST(const BST& bst){
+    copy(bst.root, this->root);
+}
+
+// move constructor
+BST::BST(BST && bst){
+    if(bst.get_root() != nullptr){
+        this->root = bst.get_root();
+        bst.get_root() = nullptr;
+    }
+}
+
+// destructor
+ BST::~BST()
+ {
+ 	std::vector<Node*> nodes;
+ 	bfs([&nodes](BST::Node*& node){nodes.push_back(node);});
+ 	for(auto& node: nodes)
+ 		delete node;
+ }
+// member function
 BST::Node*& BST::get_root(){
     return this->root;
 }

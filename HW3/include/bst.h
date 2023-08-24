@@ -17,10 +17,13 @@ public:
     Node** find_parrent(int value);
     Node** find_successor(int value);
     bool delete_node(int value);
-
+    // constructors
+    BST();
     BST(const BST& bst);
+    BST(BST && bst);
+    // overload =
     BST& operator=(const BST& bst);
-    ~BST(); 
+    ~BST();
 
 private:
     Node* root;
