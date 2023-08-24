@@ -101,3 +101,92 @@ bool BST::add_node(int value){
     }
     return true;
 }
+
+BST::Node** BST::find_node(int value){
+    BST::Node* node = root;
+    while(node){
+        if(node->value == value){
+            return &node;
+        }else if(node->value > value){
+            node = node->left;
+        }else if(node->value < value){
+            node = node->right;
+        }
+    }
+    return nullptr;
+}
+
+BST::Node** BST::find_parrent(int value){
+    BST::Node* cur = root, *pre = nullptr;
+    while(cur){
+        if(cur->value == value){
+            return &pre;
+        }else if(cur->value > value){
+            pre = cur;
+            cur = cur->left;
+        }else if(cur->value < value){
+            pre = cur;
+            cur = cur->right;
+        }
+    }
+    return nullptr;
+}
+
+BST::Node** BST::find_successor(int value){
+    BST::Node* node = root;
+    while(node){
+        if(node->value == value){
+            break;
+        }else if(node->value > value){
+            node = node->left;
+        }else if(node->value < value){
+            node = node->right;
+        }
+    }
+    if(node){
+        if(node->left){
+            return &(node->left);
+        }else if(node->right){
+            return &(node->right);
+        }
+    }
+    return nullptr;
+}
+
+bool BST::delete_node(int value){
+    BST::Node* cur = root, *pre = nullptr;
+    while(cur){
+        if(cur->value == value)break;
+        if(cur->value > value){
+            pre = cur;
+            cur = cur->left;
+        }else if(cur->value < value){
+            pre = cur;
+            cur = cur->right;
+        }
+    }
+    if(cur == nullptr)return false;
+    if(cur->left == nullptr || cur->right == nullptr){
+        auto child = cur->left != nullptr? cur->left: cur->right;
+        if(cur != root){
+            if(cur == pre->left){
+                pre->left = child;
+            }else if(cur == pre->right){
+                pre->right = child;
+            }
+        }else{
+            root = child;
+        }
+        delete cur;
+    }else{
+        auto tmp = root->right;
+        while(tmp->left){
+            tmp = tmp->left;
+        }
+        int tmpVal = tmp->value;
+        BST::delete_node(tmpVal);
+        cur->value = tmpVal;
+        return true;
+    }
+    return false;
+}

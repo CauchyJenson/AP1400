@@ -18,10 +18,15 @@ public:
     Node** find_successor(int value);
     bool delete_node(int value);
 
+    BST(const BST& bst);
+    BST& operator=(const BST& bst);
+    ~BST(); 
+
 private:
     Node* root;
 };
 
+std::ostream& operator<<(std::ostream& os, const BST& bst);
 
 class BST::Node
 {
