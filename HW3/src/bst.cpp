@@ -70,6 +70,14 @@ BST::BST(BST && bst){
  	for(auto& node: nodes)
  		delete node;
  }
+
+// overload ==
+BST& BST::operator=(const BST& bst){
+    auto newBST = new BST(bst);
+    this->~BST();
+    root = newBST->get_root();
+    return *this;
+}
 // member function
 BST::Node*& BST::get_root(){
     return this->root;
