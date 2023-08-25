@@ -71,6 +71,16 @@ BST::BST(BST && bst){
  		delete node;
  }
 
+ // List initialization
+ BST::BST(std::initializer_list<int> list){
+    this->root = nullptr;
+    if(list.size() != 0){
+        for(auto i: list){
+            this->add_node(i);
+        }
+    }
+ }
+
 // overload ==
 BST& BST::operator=(const BST& bst){
     auto newBST = new BST(bst);
@@ -148,7 +158,7 @@ BST::Node** BST::find_node(int value){
     BST::Node* node = root;
     while(node){
         if(node->value == value){
-            return &node;
+            return new Node*(node);
         }else if(node->value > value){
             node = node->left;
         }else if(node->value < value){
@@ -162,7 +172,7 @@ BST::Node** BST::find_parrent(int value){
     BST::Node* cur = root, *pre = nullptr;
     while(cur){
         if(cur->value == value){
-            return &pre;
+            return new Node*(pre);
         }else if(cur->value > value){
             pre = cur;
             cur = cur->left;
@@ -258,7 +268,7 @@ BST& BST::operator++(){
 }
 
 BST& BST::operator++(int){
-    BST tmp(*this);
+    BST tmp = BST(*this);
     ++(*this);
     return tmp;
 }

@@ -21,6 +21,7 @@ public:
     BST();
     BST(const BST& bst);
     BST(BST && bst);
+    BST(std::initializer_list<int> list);
     // overload =
     BST& operator=(const BST& bst);
     ~BST();
