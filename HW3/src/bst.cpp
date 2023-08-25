@@ -232,3 +232,33 @@ bool BST::delete_node(int value){
     }
     return false;
 }
+
+std::ostream& operator<<(std::ostream& os, const BST& bst){
+    os << "********************************************************************************" << std::endl;
+    std::queue<BST::Node*> que;
+    que.push(bst.root);
+    while(!que.empty()){
+        auto tNode = que.front();
+        que.pop();
+        os << *tNode << std::endl;
+        if(tNode->left){
+            que.push(tNode->left);
+        }
+        if(tNode->right){
+            que.push(tNode->right);
+        }
+    }
+    os << "********************************************************************************" << std::endl;
+    return os;
+}
+
+BST& BST::operator++(){
+    this->bfs([](BST::Node* &node){++node->value;});//lamda function
+    return *this;
+}
+
+BST& BST::operator++(int){
+    BST tmp(*this);
+    ++(*this);
+    return tmp;
+}

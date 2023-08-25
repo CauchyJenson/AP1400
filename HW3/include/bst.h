@@ -25,11 +25,14 @@ public:
     BST& operator=(const BST& bst);
     ~BST();
 
+    friend std::ostream& operator<<(std::ostream& os, const BST& bst);
+    BST& operator++(); // ++pre
+    BST& operator++(int); // post++
 private:
     Node* root;
 };
 
-std::ostream& operator<<(std::ostream& os, const BST& bst);
+
 
 class BST::Node
 {
