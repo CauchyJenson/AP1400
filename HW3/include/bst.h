@@ -28,7 +28,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const BST& bst);
     BST& operator++(); // ++pre
-    BST& operator++(int); // post++
+    BST operator++(int); // post++
 private:
     Node* root;
 };
