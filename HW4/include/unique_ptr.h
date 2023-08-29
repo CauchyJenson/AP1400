@@ -1,6 +1,8 @@
 #ifndef UNIQUE_PTR
 #define UNIQUE_PTR
 #include<memory>
+#include<iostream>
+using std::make_unique;
 
 template<typename T>
 class UniquePtr
@@ -12,7 +14,7 @@ private:
 public:
     UniquePtr(): _p(nullptr){}
     UniquePtr(T* p): _p(p){}
-    UniquePtr(std::unique_ptr ptr): _p(ptr.release()){}
+    UniquePtr(std::unique_ptr<T> ptr): _p(ptr.release()){}
     UniquePtr(UniquePtr<T>& p){};
     UniquePtr operator=(const UniquePtr& p){};
 
@@ -22,7 +24,7 @@ public:
     }
 
     T* get(){
-        return _P;
+        return _p;
     }
 
     T& operator*(){
@@ -49,6 +51,7 @@ public:
         return tmp;
     }
 
+    operator bool()const{return _p != nullptr;}
     
 };
 
