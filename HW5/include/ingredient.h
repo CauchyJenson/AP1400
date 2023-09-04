@@ -7,13 +7,14 @@ class Ingredient
 public:
     double get_price_unit();
     size_t get_units();
-    std::string get_name();
+    virtual std::string get_name() = 0;
 
     double price();
     
 
 protected:
-    Ingredient(double price_unit, size_t units);
+    Ingredient(double price_unit, size_t units)
+    : price_unit(price_unit), units(units){};
 
     double price_unit;
     size_t units;
@@ -32,8 +33,8 @@ double Ingredient::price(){
     return this->get_price_unit()*this->get_units();
 }
 
-std::string Ingredient::get_name(){
-    return name;
-}
+// std::string Ingredient::get_name(){
+//     return name;
+// }
 
 #endif // INGREDIENT_H
