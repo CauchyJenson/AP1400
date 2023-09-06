@@ -3,6 +3,8 @@
 #include"ingredient.h"
 #include"sub_ingredients.h"
 #include"espresso_based.h"
+#include<vector>
+#include<string>
 
 class Cappuccino: public EspressoBased
 {

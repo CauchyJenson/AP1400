@@ -2,36 +2,26 @@
 #define INGREDIENT_H
 #include<string>
 
-class Ingredient
-{
+class Ingredient {
 public:
-    double get_price_unit();
-    size_t get_units();
-    virtual std::string get_name() = 0;
+    double get_price_unit() { return price_unit; }
 
-    double price();
-    
+    size_t get_units() { return this->units; }
+
+    virtual std::string get_name() { return this->name; }
+
+    double price() { return units * price_unit; }
 
 protected:
-    Ingredient(double price_unit, size_t units)
-    : price_unit(price_unit), units(units){};
+    Ingredient(double price_unit, size_t units) {
+        this->price_unit = price_unit;
+        this->units = units;
+    } 
 
     double price_unit;
     size_t units;
     std::string name;
 };
-
-double Ingredient::get_price_unit(){
-    return price_unit;
-}
-
-size_t Ingredient::get_units(){
-    return units;
-}
-
-double Ingredient::price(){
-    return this->get_price_unit()*this->get_units();
-}
 
 // std::string Ingredient::get_name(){
 //     return name;

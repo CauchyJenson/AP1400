@@ -64,7 +64,7 @@ class Milk: public Ingredient
 public:
     Milk(size_t units) : Ingredient{10, units}
     {
-        this->name = "Cookie";
+        this->name = "Milk";
     }
 
     virtual std::string get_name() {return this->name;}
@@ -74,7 +74,7 @@ public:
 class MilkFoam: public Ingredient
 {
 public:
-    MilkFoam(size_t units) : Ingredient{10, units}
+    MilkFoam(size_t units) : Ingredient{5, units}
     {
         this->name = "MilkFoam";
     }
