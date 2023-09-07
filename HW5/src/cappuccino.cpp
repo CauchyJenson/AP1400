@@ -62,7 +62,7 @@ void Cappuccino::operator=(const Cappuccino& cap){
         for (auto& i : (this->side_items)) {
             delete i;
         }
-        ((this->side_items)).clear();
+        (this->side_items).clear();
         for (auto x : cap.side_items) {
             Cinnamon* ptr_1 = dynamic_cast<Cinnamon*>(x);
             Chocolate* ptr_2 = dynamic_cast<Chocolate*>(x);
@@ -109,10 +109,10 @@ double Cappuccino::price() {
     for (auto x : this->ingredients) {
         price += x->price();
     }
-    for (auto x : (this->side_items)) {
+    for (auto x : this->side_items) {
         price += x->price();
     }
     return price;
 }
 
-void Cappuccino::add_side_item(Ingredient* side) { ((this->side_items)).push_back(side); }
+void Cappuccino::add_side_item(Ingredient* side) { (this->side_items).push_back(side); }
