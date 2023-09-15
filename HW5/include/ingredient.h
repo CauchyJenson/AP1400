@@ -1,6 +1,5 @@
 #ifndef INGREDIENT_H
 #define INGREDIENT_H
-#include<string>
 
 class Ingredient {
 public:
@@ -23,8 +22,4 @@ protected:
     std::string name;
 };
 
-// std::string Ingredient::get_name(){
-//     return name;
-// }
-
-#endif // INGREDIENT_H
+#endif  // INGREDIENT_H
