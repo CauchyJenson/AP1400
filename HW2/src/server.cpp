@@ -39,3 +39,13 @@ double Server::get_wallet(std::string id) const{
     }
     return -1;
 }
+
+//reference: https://www.cnblogs.com/magicsoar/p/3676071.html
+using MSD = std::map<std::shared_ptr<Client>, double>; // simplify
+void show_wallets(const Server& server){
+    std::cout << std::string(20, '*') << std::endl;
+    for(const auto &cli: *(MSD*)&server){
+        std::cout << cli.first->get_id() << ": " << cli.second << std::endl;
+    }
+    std::cout << std::string(20, '*') << std::endl;
+}

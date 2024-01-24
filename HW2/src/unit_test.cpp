@@ -33,7 +33,7 @@ TEST(HW1Test, TEST4) {
     EXPECT_NE(bryan1->get_id(), bryan3->get_id());
     EXPECT_NE(bryan2->get_id(), bryan3->get_id());
 }
-/*
+
 TEST(HW1Test, TEST5) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -63,7 +63,7 @@ TEST(HW1Test, TEST8) {
     auto clint{server.add_client("clint")};
     show_wallets(server);
 }
-
+/*
 TEST(HW1Test, TEST9) {
     Server server{};
     auto bryan{server.add_client("bryan")};
