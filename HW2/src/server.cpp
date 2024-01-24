@@ -22,7 +22,7 @@ std::shared_ptr<Client>  Server::add_client(std::string id){
     return now_client;
 }
 
-std::shared_ptr<Client> Server::get_client(std::string id){
+std::shared_ptr<Client> Server::get_client(std::string id) const{
     for(auto it = clients.begin(); it != clients.end(); ++it){
         if(it->first->get_id() == id){
             return it->first;
@@ -31,3 +31,11 @@ std::shared_ptr<Client> Server::get_client(std::string id){
     return nullptr;
 }
 
+double Server::get_wallet(std::string id) const{
+    for(auto it = clients.begin(); it != clients.end(); ++it){
+        if(it->first->get_id() == id){
+            return it->second;
+        }
+    }
+    return -1;
+}

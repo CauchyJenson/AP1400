@@ -11,3 +11,7 @@ std::string Client::get_id(){
 std::string Client::get_publickey(){
     return this->public_key;
 }
+
+double Client::get_wallet() const{
+    return server->get_wallet(this->id);
+}
