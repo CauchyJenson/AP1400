@@ -1,4 +1,7 @@
 #include "server.h"
+#include <regex>
+#include <stdexcept>
+std::vector<std::string> pending_trxs;
 
 Server::Server(){}
 
@@ -38,6 +41,20 @@ double Server::get_wallet(std::string id) const{
         }
     }
     return -1;
+}
+
+bool Server::parse_trx(const std::string& trx, std::string& sender, std::string& receiver, double& value){
+    std::string pattern{"(\\w+)-(\\w+)-(\\d+\\.\\d+)"};
+    std::regex reg(pattern);
+    std::smatch res;
+    if(std::regex_match(trx, res, reg)){
+        sender = res[1];
+        receiver = res[2];
+        value = std::stod(res[3]);
+        return true;
+    }else{
+        throw std::runtime_error("invalid transaction");
+    }
 }
 
 //reference: https://www.cnblogs.com/magicsoar/p/3676071.html

@@ -73,7 +73,7 @@ TEST(HW1Test, TEST9) {
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "notmydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "mydata", "not_my_signature"));
 }
-/*
+
 TEST(HW1Test, TEST10) {
     std::string sender{}, receiver{};
     double value;
@@ -88,7 +88,7 @@ TEST(HW1Test, TEST11) {
     double value;
     EXPECT_THROW(Server::parse_trx("sarah-clay_0.5", sender, receiver, value), std::runtime_error);
 }
-
+/*
 TEST(HW1Test, TEST12) {
     Server server{};
     auto bryan{server.add_client("bryan")};
