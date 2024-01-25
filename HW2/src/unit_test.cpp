@@ -63,7 +63,7 @@ TEST(HW1Test, TEST8) {
     auto clint{server.add_client("clint")};
     show_wallets(server);
 }
-/*
+
 TEST(HW1Test, TEST9) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -73,7 +73,7 @@ TEST(HW1Test, TEST9) {
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "notmydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "mydata", "not_my_signature"));
 }
-
+/*
 TEST(HW1Test, TEST10) {
     std::string sender{}, receiver{};
     double value;
