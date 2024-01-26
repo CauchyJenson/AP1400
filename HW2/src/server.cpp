@@ -1,4 +1,5 @@
 #include "server.h"
+#include "crypto.h"
 #include <regex>
 #include <stdexcept>
 std::vector<std::string> pending_trxs;
@@ -55,6 +56,24 @@ bool Server::parse_trx(const std::string& trx, std::string& sender, std::string&
     }else{
         throw std::runtime_error("invalid transaction");
     }
+}
+
+bool Server::add_pending_trx(std::string trx, std::string signature) const{
+    std::string sender{}, receiver{};
+    double value;
+    if(parse_trx(trx, sender, receiver, value)){
+        auto p_sender = get_client(sender);
+        auto p_receiver = get_client(receiver);
+        if(p_sender == nullptr || p_receiver == nullptr){
+            return false;
+        }
+        auto authentic = crypto::verifySignature(p_sender->get_publickey(), trx, signature);
+        if(authentic && clients.at(p_sender) >= value){
+            pending_trxs.emplace_back(trx);
+            return true;
+        }
+    }
+    return false;
 }
 
 //reference: https://www.cnblogs.com/magicsoar/p/3676071.html

@@ -19,3 +19,9 @@ double Client::get_wallet() const{
 std::string Client::sign(std::string txt) const{
     return crypto::signMessage(this->private_key, txt);
 }
+
+bool Client::transfer_money(std::string receiver, double value){
+    std::string trx = this->id + "-" + receiver + "-" + std::to_string(value);
+    std::string signature = this->sign(trx);
+    return server->add_pending_trx(trx, signature);
+}
