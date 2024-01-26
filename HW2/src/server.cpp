@@ -1,7 +1,9 @@
 #include "server.h"
 #include "crypto.h"
+#include <cstddef>
 #include <regex>
 #include <stdexcept>
+#include <string>
 std::vector<std::string> pending_trxs;
 
 Server::Server(){}
@@ -74,6 +76,34 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const{
         }
     }
     return false;
+}
+
+size_t Server::mine(){
+    std::string mempool = {};
+    for(auto trx: pending_trxs){
+        mempool += trx;
+    }
+    size_t nonce = 0;
+    bool flag = false;
+    while(!flag){
+        for(auto &c: clients){
+            nonce = c.first->generate_nonce();
+            if(crypto::sha256(mempool + std::to_string(nonce)).substr(0, 10).find("000") != std::string::npos){
+                flag = true;
+                c.second += 6.25;
+                for(auto trx: pending_trxs){
+                    std::string sender{}, receiver{};
+                    double value;
+                    parse_trx(trx, sender, receiver, value);
+                    clients[get_client(sender)] -= value;
+                    clients[get_client(receiver)] += value;
+                }
+                pending_trxs.clear();
+                return nonce;
+            }
+        }
+    }
+    return nonce;
 }
 
 //reference: https://www.cnblogs.com/magicsoar/p/3676071.html

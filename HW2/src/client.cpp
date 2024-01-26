@@ -1,4 +1,5 @@
 #include "client.h"
+#include <random>
 
 Client::Client(std::string id, const Server& server):
     id(id), server(&server){
@@ -24,4 +25,10 @@ bool Client::transfer_money(std::string receiver, double value){
     std::string trx = this->id + "-" + receiver + "-" + std::to_string(value);
     std::string signature = this->sign(trx);
     return server->add_pending_trx(trx, signature);
+}
+
+size_t Client::generate_nonce(){
+    static std::default_random_engine e;
+    static std::uniform_int_distribution u(size_t(0), size_t(INT_MAX));
+    return u(e);
 }
