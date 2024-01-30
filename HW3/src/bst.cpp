@@ -63,7 +63,7 @@ BST::BST(std::initializer_list<int> list):root(nullptr){
 }
 
  bool BST::add_node(int value){
-    auto r = get_root();
+    auto r = this->get_root();
     auto pre = r;
     if(!r){
         this->root = new Node(value, nullptr, nullptr);
@@ -90,4 +90,44 @@ BST::BST(std::initializer_list<int> list):root(nullptr){
 
  BST::Node*& BST::get_root(){
     return this->root;
+}
+
+void BST::bfs(std::function<void(Node*& node)> func){
+    if(!this->get_root())return;
+    std::queue<Node*> que;
+    auto r = this->get_root();
+    que.push(r);
+    while(!que.empty()){
+        auto cur = que.front();
+        que.pop();
+        func(cur);
+        if(cur->left)que.push(cur->left);
+        if(cur->right)que.push(cur->right);
+    }
+    return;
+}
+
+size_t BST::length(){
+    size_t len = 0;
+    this->bfs(
+        [&len](BST::Node* &node){
+            ++len;
+    });
+    return len;
+}
+
+std::ostream& operator<<(std::ostream& os, const BST& bst){
+    os << std::string(80, '*') << std::endl;
+    auto r = bst.root;
+    std::queue<BST::Node*> que;
+    if(r)que.push(r);
+    while(!que.empty()){
+        auto cur = que.front();
+        que.pop();
+        os << cur;
+        if(cur->left)que.push(cur->left);
+        if(cur->right)que.push(cur->right);
+    }
+    os << std::string(80, '*') << std::endl;
+    return os;
 }
