@@ -32,4 +32,26 @@ public:
 	Node* right;
 };
 
+std::ostream& operator<<(std::ostream& os, const BST::Node& node);
+
+bool operator>(BST::Node& node, int v);
+
+bool operator>(int v, BST::Node& node);
+
+bool operator>=(BST::Node& node, int v);
+
+bool operator>=(int v, BST::Node& node);
+
+bool operator<(BST::Node& node, int v);
+
+bool operator<(int v, BST::Node& node);
+
+bool operator<=(BST::Node& node, int v);
+
+bool operator<=(int v, BST::Node& node);
+
+bool operator==(BST::Node& node, int v);
+
+bool operator==(int v, BST::Node& node);
+
 #endif //BST_H
