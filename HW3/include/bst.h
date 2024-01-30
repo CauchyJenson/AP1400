@@ -7,6 +7,7 @@ class BST
 {
 public:
     class Node;
+    BST(std::initializer_list<int> list);
     Node*& get_root();
     void bfs(std::function<void(Node*& node)> func);
     size_t length();
