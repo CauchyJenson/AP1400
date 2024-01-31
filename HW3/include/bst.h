@@ -4,12 +4,14 @@
 #include <functional>
 #include <queue>
 #include <string>
+#include <vector>
 
 class BST
 {
 public:
     class Node;
     BST(std::initializer_list<int> list);
+    BST(BST &b);
     Node*& get_root();
     void bfs(std::function<void(Node*& node)> func);
     size_t length();
@@ -19,6 +21,7 @@ public:
     Node** find_successor(int value);
     bool delete_node(int value);
     friend std::ostream& operator<<(std::ostream& os, const BST& bst);
+    BST operator=(BST& b);
 
 private:
     Node* root;

@@ -62,6 +62,33 @@ BST::BST(std::initializer_list<int> list):root(nullptr){
     }
 }
 
+BST::BST(BST &b): root(nullptr){
+    std::vector<int> v;
+    b.bfs(
+        [&v](BST::Node* &node){
+            v.emplace_back(node->value);
+        }
+    );
+    for(auto &i: v){
+        add_node(i);
+    }
+}
+
+BST BST::operator=(BST& b){
+    if(this->root == b.get_root())return *this;
+    this->root = nullptr;
+    std::vector<int> v;
+    b.bfs(
+        [&v](BST::Node* &node){
+            v.emplace_back(node->value);
+        }
+    );
+    for(auto &i: v){
+        add_node(i);
+    }
+    return *this;
+}
+
  bool BST::add_node(int value){
     auto r = this->get_root();
     auto pre = r;
@@ -182,18 +209,18 @@ BST::Node** BST::find_successor(int value){
     }
     return nullptr;
 }
-
+//copy from Franz.
 bool BST::delete_node(int value) {
     auto node = find_node(value);
     auto parent = find_parrent(value);
 
-    // 404 not found
+    //not found
     if (node == nullptr) {
         return false;
     }
-
+    // is leaf
     if ((*node)->left == nullptr && (*node)->right == nullptr) {
-        if (get_root() == *node)
+        if (get_root() == *node) // is root
             root = nullptr;
         else {
             if (value > (*parent)->value)
@@ -201,30 +228,30 @@ bool BST::delete_node(int value) {
             else
                 (*parent)->left = nullptr;
         }
-
+    // has two children
     } else if ((*node)->left != nullptr && (*node)->right != nullptr) {
         auto next = find_successor(value);
-        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};
-        delete_node((*next)->value);
+        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};//copy successor, to make it current node.
+        delete_node((*next)->value);// next is a leaf, so just delete it.
         delete next;
-        if (get_root() == *node) {
+        if (get_root() == *node) {// is root
             new_one->left = root->left;
             new_one->right = root->right;
             root = new_one;
-        } else {
+        } else {// not root
             if ((*parent)->left == *node)
                 (*parent)->left = new_one;
             else
                 (*parent)->right = new_one;
         }
-    } else {
+    } else {// has one child
         Node* new_one = nullptr;
         if ((*node)->left)
             new_one = (*node)->left;
         else
             new_one = (*node)->right;
 
-        if (root == *node) {
+        if (root == *node) {// is root
             new_one->left = root->left;
             new_one->right = root->right;
             root = new_one;
