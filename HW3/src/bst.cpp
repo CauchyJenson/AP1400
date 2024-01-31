@@ -128,6 +128,116 @@ std::ostream& operator<<(std::ostream& os, const BST& bst){
         if(cur->left)que.push(cur->left);
         if(cur->right)que.push(cur->right);
     }
+    os << std::endl;
     os << std::string(80, '*') << std::endl;
     return os;
+}
+
+BST::Node** BST::find_node(int value){
+    auto r = this->get_root();
+    while(r){
+        if(r->value > value){
+            r = r->left;
+        }else if(r->value < value){
+            r = r->right;
+        }else break;
+    }
+    if(!r)return nullptr;
+    //return &r;
+    return new Node*(r);
+}
+
+BST::Node** BST::find_parrent(int value){
+    auto cur = this->get_root();
+    decltype(cur) pre = nullptr;
+    while(cur){
+        if(cur->value > value){
+            pre = cur;
+            cur = cur->left;
+        }else if(cur->value < value){
+            pre = cur;
+            cur = cur->right;
+        }else break;
+    }
+    if(!pre)return nullptr;
+    return new Node*(pre);
+}
+
+BST::Node** BST::find_successor(int value){
+    auto cur = this->find_node(value);
+    if(!cur)return nullptr;
+    if((*cur)->left){
+        auto tmp = (*cur)->left;
+        while(tmp->right){
+            tmp = tmp->right;
+        }
+        return new Node*(tmp);
+    }
+    if((*cur)->right){
+        auto tmp = (*cur)->right;
+        while(tmp->left){
+            tmp = tmp->left;
+        }
+        return new Node*(tmp);
+    }
+    return nullptr;
+}
+
+bool BST::delete_node(int value) {
+    auto node = find_node(value);
+    auto parent = find_parrent(value);
+
+    // 404 not found
+    if (node == nullptr) {
+        return false;
+    }
+
+    if ((*node)->left == nullptr && (*node)->right == nullptr) {
+        if (get_root() == *node)
+            root = nullptr;
+        else {
+            if (value > (*parent)->value)
+                (*parent)->right = nullptr;
+            else
+                (*parent)->left = nullptr;
+        }
+
+    } else if ((*node)->left != nullptr && (*node)->right != nullptr) {
+        auto next = find_successor(value);
+        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};
+        delete_node((*next)->value);
+        delete next;
+        if (get_root() == *node) {
+            new_one->left = root->left;
+            new_one->right = root->right;
+            root = new_one;
+        } else {
+            if ((*parent)->left == *node)
+                (*parent)->left = new_one;
+            else
+                (*parent)->right = new_one;
+        }
+    } else {
+        Node* new_one = nullptr;
+        if ((*node)->left)
+            new_one = (*node)->left;
+        else
+            new_one = (*node)->right;
+
+        if (root == *node) {
+            new_one->left = root->left;
+            new_one->right = root->right;
+            root = new_one;
+        } else {
+            if ((*parent)->left == *node)
+                (*parent)->left = new_one;
+            else
+                (*parent)->right = new_one;
+        }
+    }
+    delete *node;
+    delete node;
+    delete parent;
+
+    return true;
 }
