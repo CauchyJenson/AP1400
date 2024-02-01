@@ -74,6 +74,10 @@ BST::BST(BST &b): root(nullptr){
     }
 }
 
+BST::BST(BST &&b): root(b.get_root()){
+    b.get_root() = nullptr;
+}
+
 BST BST::operator=(BST& b){
     if(this->root == b.get_root())return *this;
     this->root = nullptr;
@@ -87,6 +91,28 @@ BST BST::operator=(BST& b){
         add_node(i);
     }
     return *this;
+}
+
+BST BST::operator=(BST&& b){
+    if(this->root == b.get_root())return *this;
+    this->root = b.get_root();
+    b.get_root() = nullptr;
+    return *this;
+}
+
+BST& operator++(BST& b){
+    b.bfs(
+        [](BST::Node* &node){
+            ++node->value;
+        }
+    );
+    return b;
+}
+
+BST operator++(BST& b, int){
+    BST tmp(b);
+    ++b;
+    return tmp;
 }
 
  bool BST::add_node(int value){

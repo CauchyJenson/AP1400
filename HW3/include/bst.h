@@ -12,6 +12,7 @@ public:
     class Node;
     BST(std::initializer_list<int> list);
     BST(BST &b);
+    BST(BST &&b);
     Node*& get_root();
     void bfs(std::function<void(Node*& node)> func);
     size_t length();
@@ -22,6 +23,9 @@ public:
     bool delete_node(int value);
     friend std::ostream& operator<<(std::ostream& os, const BST& bst);
     BST operator=(BST& b);
+    BST operator=(BST&& b);
+    friend BST& operator++(BST& b);
+    friend BST operator++(BST& b, int);
 
 private:
     Node* root;
