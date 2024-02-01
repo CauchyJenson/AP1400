@@ -1,227 +1,252 @@
 #include "bst.h"
 
-
-// Class Node part
 BST::Node::Node(int value, Node* left, Node* right):
-        value(value), left(left), right(right){}
+    value{value}, left{left}, right{right}{}
 
-BST::Node::Node():value(0), left(nullptr), right(nullptr){}
+BST::Node::Node():
+    value{0}, left{nullptr}, right{nullptr}{}
 
-BST::Node::Node(const Node& node):value(node.value),
-                            left(node.left), right(node.right){}
-                    
+BST::Node::Node(const Node& node):
+    Node(node.value, node.left, node.right){}
+
 std::ostream& operator<<(std::ostream& os, const BST::Node& node){
-    os << std::hex << std::setw(16) << &node << "=> value:" 
-    << std::setw(10) << node.value << "left:"
-    << std::hex << std::setw(16) << node.left << "right:"
-    << std::hex << std::setw(16) << node.right <<std::endl;
+    os << "Value:" << node.value << '\t'
+         << "Left:" << node.left << '\t'
+         << "Right:" << node.right << '\n';
     return os;
 }
-// ==
-bool operator==(const BST::Node& node, int num){return node.value == num;}
-bool operator==(int num, const BST::Node& node){return num == node.value;}
-// >
-bool operator<(const BST::Node& node, int num){return node.value < num;}
-bool operator<(int num, const BST::Node& node){return num < node.value;}
-// >
-bool operator>(const BST::Node& node, int num){return node.value > num;}
-bool operator>(int num, const BST::Node& node){return num > node.value;}
-// <=
-bool operator<=(const BST::Node& node, int num){return node.value <= num;}
-bool operator<=(int num, const BST::Node& node){return num <= node.value;}
-// >=
-bool operator>=(const BST::Node& node, int num){return node.value >= num;}
-bool operator>=(int num, const BST::Node& node){return num >= node.value;}
 
+bool operator>(BST::Node& node, int v){
+    return node.value > v;
+}
 
+bool operator>(int v, BST::Node& node){
+    return v > node.value;
+}
 
+bool operator>=(BST::Node& node, int v){
+    return node.value >= v;
+}
 
-// BST part
+bool operator>=(int v, BST::Node& node){
+    return v >= node.value;
+}
 
-// default constructor
-BST::BST(){this->root = nullptr;}
+bool operator<(BST::Node& node, int v){
+    return !(node >= v);
+}
 
-// copy constructor
-static void copy(BST::Node* a, BST::Node* &b){
-    if(a){// a -> b
-        b = new BST::Node(a->value, nullptr, nullptr);
-        copy(a->left, b->left);
-        copy(a->right, b->right);
+bool operator<(int v, BST::Node& node){
+    return !(v >= node);
+}
+
+bool operator<=(BST::Node& node, int v){
+    return !(node > v);
+}
+
+bool operator<=(int v, BST::Node& node){
+    return !(v > node);
+}
+
+bool operator==(BST::Node& node, int v){
+    return node.value == v;
+}
+
+bool operator==(int v, BST::Node& node){
+    return  v == node.value;
+}
+
+BST::BST(std::initializer_list<int> list):root(nullptr){
+    for(auto &i: list){
+        add_node(i);
     }
-    return;
-}
-BST::BST(const BST& bst){
-    copy(bst.root, this->root);
 }
 
-// move constructor
-BST::BST(BST && bst){
-    if(bst.get_root() != nullptr){
-        this->root = bst.get_root();
-        bst.get_root() = nullptr;
-    }
-}
-
-// destructor
- BST::~BST()
- {
- 	std::vector<Node*> nodes;
- 	bfs([&nodes](BST::Node*& node){nodes.push_back(node);});
- 	for(auto& node: nodes)
- 		delete node;
- }
-
- // List initialization
- BST::BST(std::initializer_list<int> list){
-    this->root = nullptr;
-    if(list.size() != 0){
-        for(auto i: list){
-            this->add_node(i);
+BST::BST(BST &b): root(nullptr){
+    std::vector<int> v;
+    b.bfs(
+        [&v](BST::Node* &node){
+            v.emplace_back(node->value);
         }
+    );
+    for(auto &i: v){
+        add_node(i);
     }
- }
+}
 
-// overload ==
-BST& BST::operator=(const BST& bst){
-    auto newBST = new BST(bst);
-    this->~BST();
-    root = newBST->get_root();
+BST::BST(BST &&b): root(b.get_root()){
+    b.get_root() = nullptr;
+}
+
+BST BST::operator=(BST& b){
+    if(this->root == b.get_root())return *this;
+    this->root = nullptr;
+    std::vector<int> v;
+    b.bfs(
+        [&v](BST::Node* &node){
+            v.emplace_back(node->value);
+        }
+    );
+    for(auto &i: v){
+        add_node(i);
+    }
     return *this;
 }
-// member function
-BST::Node*& BST::get_root(){
+
+BST BST::operator=(BST&& b){
+    if(this->root == b.get_root())return *this;
+    this->root = b.get_root();
+    b.get_root() = nullptr;
+    return *this;
+}
+
+BST& operator++(BST& b){
+    b.bfs(
+        [](BST::Node* &node){
+            ++node->value;
+        }
+    );
+    return b;
+}
+
+BST operator++(BST& b, int){
+    BST tmp(b);
+    ++b;
+    return tmp;
+}
+
+ bool BST::add_node(int value){
+    auto r = this->get_root();
+    auto pre = r;
+    if(!r){
+        this->root = new Node(value, nullptr, nullptr);
+        return true;
+    }
+    while(r){
+        pre = r;
+        if(r->value > value){
+            r = r->left;
+        }else if(r->value < value){
+            r = r->right;
+        }else return false;
+    }
+    if(pre->value > value){
+        pre->left = new Node(value, nullptr, nullptr);
+        return true;
+    }else{
+        pre->right = new Node(value, nullptr, nullptr);
+        return true;
+    }
+    return false;
+
+ }
+
+ BST::Node*& BST::get_root(){
     return this->root;
 }
 
 void BST::bfs(std::function<void(Node*& node)> func){
-    if(!root)return;
-    std::queue<BST::Node*> que;
-    que.push(root);
+    if(!this->get_root())return;
+    std::queue<Node*> que;
+    auto r = this->get_root();
+    que.push(r);
     while(!que.empty()){
-        int n = que.size();
-        for(int i = 0; i < n; ++i){
-            auto t = que.front();
-            que.pop();
-            if(t->left)que.push(t->left);
-            if(t->right)que.push(t->right);
-            func(t);
-            
-        }
+        auto cur = que.front();
+        que.pop();
+        func(cur);
+        if(cur->left)que.push(cur->left);
+        if(cur->right)que.push(cur->right);
     }
+    return;
 }
 
 size_t BST::length(){
-    if(!root)return 0;
-    size_t sum = 0;
-    std::queue<BST::Node*> que;
-    que.push(root);
-    while(!que.empty()){
-        int n = que.size();
-        for(int i = 0; i < n; ++i){
-            auto t = que.front();
-            if(t->left)que.push(t->left);
-            if(t->right)que.push(t->right);
-            ++sum;
-            que.pop();
-        }
-    }
-    return sum;
+    size_t len = 0;
+    this->bfs(
+        [&len](BST::Node* &node){
+            ++len;
+    });
+    return len;
 }
 
-
-bool BST::add_node(int value){
-    if(root == nullptr){
-        root = new BST::Node(value, nullptr, nullptr);
-        return true;
+std::ostream& operator<<(std::ostream& os, const BST& bst){
+    os << std::string(80, '*') << std::endl;
+    auto r = bst.root;
+    std::queue<BST::Node*> que;
+    if(r)que.push(r);
+    while(!que.empty()){
+        auto cur = que.front();
+        que.pop();
+        os << cur;
+        if(cur->left)que.push(cur->left);
+        if(cur->right)que.push(cur->right);
     }
-    Node* cur = root, *pre = nullptr;
-    while(cur != nullptr){
-        if(cur->value == value){   // find same node, 
-            return false;       // add fail, return false
-        }
-        pre = cur;
-        if(cur->value > value){
-            cur = cur->left;
-        }else{
-            cur = cur->right;
-        }
-    }
-    // Node* node = new BST::Node(value, nullptr, nullptr);
-    if(pre->value > value){
-        pre->left = new BST::Node(value, nullptr, nullptr);
-    }else{
-        pre->right = new BST::Node(value, nullptr, nullptr);
-    }
-    return true;
+    os << std::endl;
+    os << std::string(80, '*') << std::endl;
+    return os;
 }
 
 BST::Node** BST::find_node(int value){
-    BST::Node* node = root;
-    while(node){
-        if(node->value == value){
-            return new Node*(node);
-        }else if(node->value > value){
-            node = node->left;
-        }else if(node->value < value){
-            node = node->right;
-        }
+    auto r = this->get_root();
+    while(r){
+        if(r->value > value){
+            r = r->left;
+        }else if(r->value < value){
+            r = r->right;
+        }else break;
     }
-    return nullptr;
+    if(!r)return nullptr;
+    //return &r;
+    return new Node*(r);
 }
 
 BST::Node** BST::find_parrent(int value){
-    BST::Node* cur = root, *pre = nullptr;
+    auto cur = this->get_root();
+    decltype(cur) pre = nullptr;
     while(cur){
-        if(cur->value == value){
-            return new Node*(pre);
-        }else if(cur->value > value){
+        if(cur->value > value){
             pre = cur;
             cur = cur->left;
         }else if(cur->value < value){
             pre = cur;
             cur = cur->right;
-        }
+        }else break;
     }
-    return nullptr;
-}
-
-static void in_order(BST::Node* root, std::vector<BST::Node*>& vec){
-    if(root){
-        in_order(root->right, vec);
-        vec.push_back(root);
-        in_order(root->left, vec);
-    }
+    if(!pre)return nullptr;
+    return new Node*(pre);
 }
 
 BST::Node** BST::find_successor(int value){
-    BST::Node* node = root;
-    if(!root)return nullptr;
-    std::vector<BST::Node*> vec;
-    in_order(node, vec);
-    int i = 0;
-    for(; i < vec.size(); ++i){
-        if(vec[i]->value == value) break;
+    auto cur = this->find_node(value);
+    if(!cur)return nullptr;
+    if((*cur)->left){
+        auto tmp = (*cur)->left;
+        while(tmp->right){
+            tmp = tmp->right;
+        }
+        return new Node*(tmp);
     }
-    return i+1 <vec.size()? find_node(vec[i+1]->value): nullptr;
+    if((*cur)->right){
+        auto tmp = (*cur)->right;
+        while(tmp->left){
+            tmp = tmp->left;
+        }
+        return new Node*(tmp);
+    }
+    return nullptr;
 }
-
-int MostLeftOnRight(BST::Node* n) {
-    BST::Node* p = n;
-    while (p->left != nullptr) p = p->left;
-    return p->value;
-}
-
+//copy from Franz.
 bool BST::delete_node(int value) {
     auto node = find_node(value);
     auto parent = find_parrent(value);
 
-    // 404 not found
+    //not found
     if (node == nullptr) {
         return false;
     }
-
+    // is leaf
     if ((*node)->left == nullptr && (*node)->right == nullptr) {
-        if (get_root() == *node)
+        if (get_root() == *node) // is root
             root = nullptr;
         else {
             if (value > (*parent)->value)
@@ -229,30 +254,30 @@ bool BST::delete_node(int value) {
             else
                 (*parent)->left = nullptr;
         }
-
+    // has two children
     } else if ((*node)->left != nullptr && (*node)->right != nullptr) {
         auto next = find_successor(value);
-        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};
-        delete_node((*next)->value);
+        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};//copy successor, to make it current node.
+        delete_node((*next)->value);// next is a leaf, so just delete it.
         delete next;
-        if (get_root() == *node) {
+        if (get_root() == *node) {// is root
             new_one->left = root->left;
             new_one->right = root->right;
             root = new_one;
-        } else {
+        } else {// not root
             if ((*parent)->left == *node)
                 (*parent)->left = new_one;
             else
                 (*parent)->right = new_one;
         }
-    } else {
+    } else {// has one child
         Node* new_one = nullptr;
         if ((*node)->left)
             new_one = (*node)->left;
         else
             new_one = (*node)->right;
 
-        if (root == *node) {
+        if (root == *node) {// is root
             new_one->left = root->left;
             new_one->right = root->right;
             root = new_one;
@@ -268,34 +293,4 @@ bool BST::delete_node(int value) {
     delete parent;
 
     return true;
-}
-
-std::ostream& operator<<(std::ostream& os, const BST& bst){
-    os << "********************************************************************************" << std::endl;
-    std::queue<BST::Node*> que;
-    que.push(bst.root);
-    while(!que.empty()){
-        auto tNode = que.front();
-        que.pop();
-        os << *tNode << std::endl;
-        if(tNode->left){
-            que.push(tNode->left);
-        }
-        if(tNode->right){
-            que.push(tNode->right);
-        }
-    }
-    os << "********************************************************************************" << std::endl;
-    return os;
-}
-
-BST& BST::operator++(){
-    this->bfs([](BST::Node* &node){++node->value;});//lamda function
-    return *this;
-}
-
-BST BST::operator++(int){
-    BST tmp = BST(*this);
-    ++(*this);
-    return tmp;
 }
