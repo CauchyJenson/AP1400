@@ -16,6 +16,7 @@ public:
     };
 
     void reset(T* p = nullptr);
+    T* release();
 
     T* get();
     T& operator*();
@@ -50,7 +51,12 @@ void UniquePtr<T>::reset(T* p){
     _p = p;
 }
 
-
+template <typename T>
+T* UniquePtr<T>::release(){
+    auto p = this->_p;
+    this->_p = nullptr;
+    return p;
+}
 
 
 template <typename T>
