@@ -83,7 +83,7 @@ TEST(HW4Test, TEST9) {
     EXPECT_FALSE(ptr);
     delete tmp;
 }
-/*
+
 TEST(HW4Test, TEST10) {
     SharedPtr<int> ptr1{new int{10}};
     EXPECT_EQ(*ptr1.get(), 10);
@@ -169,7 +169,7 @@ TEST(HW4Test, TEST17) {
     SharedPtr<std::vector<int>> ptr3{new std::vector<int>{1, 2, 3, 4, 5}};
     EXPECT_FALSE(ptr3->empty());
 }
-
+/*
 TEST(HW4Test, TEST18) {
     SharedPtr<std::string> ptr{new std::string{"hello world!"}};
     EXPECT_EQ(ptr->length(), 12);
