@@ -18,12 +18,15 @@ public:
                 delete _count;
         }
     }
+    SharedPtr& operator=(SharedPtr& other);
 
     T& operator*();
     T* operator->();
+    operator bool() const;
 
     T* get();
     int use_count();
+    void reset(T* p = nullptr);
 };
 
 
@@ -50,6 +53,16 @@ SharedPtr<T>::SharedPtr(SharedPtr& other){
 }
 
 template <typename T>
+SharedPtr<T>& SharedPtr<T>::operator=(SharedPtr<T>& other){
+    if(&other == this)return *this;
+    this->~SharedPtr();
+    _p = other._p;
+    _count = other._count;
+    (*_count)++;
+    return *this;
+}
+
+template <typename T>
 T& SharedPtr<T>::operator*(){
     return *_p;
 }
@@ -59,6 +72,10 @@ T* SharedPtr<T>::operator->(){
     return _p;
 }
 
+template <typename T>
+SharedPtr<T>::operator bool() const{
+    return _p != nullptr;
+}
 
 template <typename T>
 T* SharedPtr<T>::get(){
@@ -68,6 +85,21 @@ T* SharedPtr<T>::get(){
 template <typename T>
 int SharedPtr<T>::use_count(){
     return *_count;
+}
+
+template <typename T>
+void SharedPtr<T>::reset(T *p){
+    if(_p){
+        --(*_count);
+        if(*_count == 0){
+            this->~SharedPtr();
+        }
+    }
+    _p = p;
+    if(_p)
+        _count = new int{1};
+    else
+        _count = new int{0};
 }
 
 
