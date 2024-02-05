@@ -6,7 +6,7 @@
 #include "cappuccino.h"
 #include "mocha.h"
 
-/*
+
 TEST(HW5Test, TEST1) {
     Cinnamon    cinnamon{2};  
     EXPECT_EQ(cinnamon.get_name(), "Cinnamon");
@@ -42,7 +42,7 @@ TEST(HW5Test, TEST3) {
     ingredient = &water;
     EXPECT_EQ(ingredient->get_name(), "Water");
 }
-
+/*
 TEST(HW5Test, TEST4) {
     Cappuccino cappuccino{};
     EXPECT_EQ(cappuccino.get_name(), "Cappuccino");
