@@ -42,7 +42,7 @@ TEST(HW5Test, TEST3) {
     ingredient = &water;
     EXPECT_EQ(ingredient->get_name(), "Water");
 }
-/*
+
 TEST(HW5Test, TEST4) {
     Cappuccino cappuccino{};
     EXPECT_EQ(cappuccino.get_name(), "Cappuccino");
@@ -92,7 +92,7 @@ TEST(HW5Test, TEST9) {
     equal = equal;
     EXPECT_EQ(equal.price(), 57);
 }
-
+/*
 TEST(HW5Test, TEST10) {
     Mocha mocha{};
     EXPECT_EQ(mocha.get_name(), "Mocha");
