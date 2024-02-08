@@ -1,32 +1,29 @@
 #ifndef CAPPUCCINO
 #define CAPPUCCINO
-#include <string>
-#include <vector>
-
+=======
 #include "espresso_based.h"
-#include "ingredient.h"
 #include "sub_ingredients.h"
 
-class Cappuccino : public EspressoBased {
+class Cappuccino: public EspressoBased
+{
 public:
     Cappuccino();
     Cappuccino(const Cappuccino& cap);
-    ~Cappuccino();
-
+	~Cappuccino();
     void operator=(const Cappuccino& cap);
-
-    // std::vector<Ingredient*>& get_ingredients();
-    std::vector<Ingredient*>& get_side_items();
 
     virtual std::string get_name();
     virtual double price();
+    void brew() {}
 
     void add_side_item(Ingredient* side);
-
-    void brew() {}
+    std::vector<Ingredient*>& get_side_items();
 
 private:
     std::vector<Ingredient*> side_items;
+
 };
+
+
 
 #endif  // CAPPUCCINO

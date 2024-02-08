@@ -1,70 +1,80 @@
 #include "espresso_based.h"
 
-std::string EspressoBased::get_name() { return this->name; }
+void EspressoBased::brew() {}
 
-double EspressoBased::price() {
-    double p = 0;
-    for (auto x : this->ingredients) {
-        p += x->price();
-    }
-    return p;
+std::vector<Ingredient*>& EspressoBased::get_ingredients()
+{
+    return this->ingredients;
 }
 
-void EspressoBased::brew() {}  
-std::vector<Ingredient*>& EspressoBased::get_ingredients() { return this->ingredients; }
-
-EspressoBased::EspressoBased() {
+EspressoBased::EspressoBased()
+{
     this->name = "";
-    this->ingredients = std::vector<Ingredient*>{};
+    this->ingredients = {};
 }
 
-EspressoBased::EspressoBased(const EspressoBased& esp) {
+EspressoBased::EspressoBased(const EspressoBased& esp)
+{
     this->name = esp.name;
-    this->ingredients = std::vector<Ingredient*>{};
-    for (auto& x : esp.ingredients) {
-        Cinnamon* ptr_1 = dynamic_cast<Cinnamon*>(x);
-        Chocolate* ptr_2 = dynamic_cast<Chocolate*>(x);
-        Sugar* ptr_3 = dynamic_cast<Sugar*>(x);
-        Cookie* ptr_4 = dynamic_cast<Cookie*>(x);
-        Espresso* ptr_5 = dynamic_cast<Espresso*>(x);
-        Milk* ptr_6 = dynamic_cast<Milk*>(x);
-        MilkFoam* ptr_7 = dynamic_cast<MilkFoam*>(x);
-        Water* ptr_8 = dynamic_cast<Water*>(x);
-
-        if (ptr_1 != nullptr) {
-            Cinnamon* y = new Cinnamon(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_2 != nullptr) {
-            Chocolate* y = new Chocolate(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_3 != nullptr) {
-            Sugar* y = new Sugar(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_4 != nullptr) {
-            Cookie* y = new Cookie(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_5 != nullptr) {
-            Espresso* y = new Espresso(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_6 != nullptr) {
-            Milk* y = new Milk(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_7 != nullptr) {
-            MilkFoam* y = new MilkFoam(x->get_units());
-            (this->ingredients).push_back(y);
-        } else if (ptr_8 != nullptr) {
-            Water* y = new Water(x->get_units());
-            (this->ingredients).push_back(y);
+    this->ingredients = {};
+    for(const auto &i: esp.ingredients)
+    {
+        auto p_cinnamon = dynamic_cast<Cinnamon*>(i);
+        if(p_cinnamon)
+        {
+            this->ingredients.push_back(new Cinnamon(*p_cinnamon));
+            continue;
+        }
+        auto p_chocolate = dynamic_cast<Chocolate*>(i);
+        if(p_chocolate)
+        {
+            this->ingredients.push_back(new Chocolate(*p_chocolate));
+            continue;
+        }
+        auto p_sugar = dynamic_cast<Sugar*>(i);
+        if(p_sugar)
+        {
+            this->ingredients.push_back(new Sugar(*p_sugar));
+            continue;
+        }
+        auto p_cookie = dynamic_cast<Cookie*>(i);
+        if(p_cookie)
+        {
+            this->ingredients.push_back(new Cookie(*p_cookie));
+            continue;
+        }
+        auto p_espresso = dynamic_cast<Espresso*>(i);
+        if(p_espresso)
+        {
+            this->ingredients.push_back(new Espresso(*p_espresso));
+            continue;
+        }
+        auto p_milk = dynamic_cast<Milk*>(i);
+        if(p_milk)
+        {
+            this->ingredients.push_back(new Milk(*p_milk));
+            continue;
+        }
+        auto p_milkFoam = dynamic_cast<MilkFoam*>(i);
+        if(p_milkFoam)
+        {
+            this->ingredients.push_back(new MilkFoam(*p_milkFoam));
+            continue;
+        }
+        auto p_water = dynamic_cast<Water*>(i);
+        if(p_water)
+        {
+            this->ingredients.push_back(new Water(*p_water));
+            continue;
         }
     }
 }
 
-void EspressoBased::operator=(const EspressoBased& esp) {
-    this->name = esp.name;
-    this->ingredients = esp.ingredients;
-}
-
-EspressoBased::~EspressoBased() {
-    for (const auto& i : ingredients) delete i;
-    ingredients.clear();
+EspressoBased::~EspressoBased()
+{
+    for(auto &i: this->ingredients)
+    {
+        delete i;
+    }
+    this->ingredients.clear();
 }

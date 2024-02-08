@@ -1,116 +1,223 @@
 #include "cappuccino.h"
 
-Cappuccino::Cappuccino() {
-    this->ingredients = std::vector<Ingredient*>{};
+
+Cappuccino::Cappuccino()
+{
+    this->name = "Cappuccino";
+    this->ingredients = {};
     (this->ingredients).push_back(new Espresso{2});
     (this->ingredients).push_back(new Milk{2});
     (this->ingredients).push_back(new MilkFoam{1});
-    this->side_items = std::vector<Ingredient*>{};
+    this->side_items = {};
 }
 
-Cappuccino::~Cappuccino() {
-    for (const auto& i : side_items) delete i;
-    side_items.clear();
-}
-
-std::vector<Ingredient*>& Cappuccino::get_side_items() { return this->side_items; }
-
-Cappuccino::Cappuccino(const Cappuccino& cap) : EspressoBased(cap) {
-    for (auto x : cap.side_items) {
-        Cinnamon* ptr_1 = dynamic_cast<Cinnamon*>(x);
-        Chocolate* ptr_2 = dynamic_cast<Chocolate*>(x);
-        Sugar* ptr_3 = dynamic_cast<Sugar*>(x);
-        Cookie* ptr_4 = dynamic_cast<Cookie*>(x);
-        Espresso* ptr_5 = dynamic_cast<Espresso*>(x);
-        Milk* ptr_6 = dynamic_cast<Milk*>(x);
-        MilkFoam* ptr_7 = dynamic_cast<MilkFoam*>(x);
-        Water* ptr_8 = dynamic_cast<Water*>(x);
-
-        if (ptr_1 != nullptr) {
-            Cinnamon* y = new Cinnamon(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_2 != nullptr) {
-            Chocolate* y = new Chocolate(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_3 != nullptr) {
-            Sugar* y = new Sugar(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_4 != nullptr) {
-            Cookie* y = new Cookie(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_5 != nullptr) {
-            Espresso* y = new Espresso(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_6 != nullptr) {
-            Milk* y = new Milk(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_7 != nullptr) {
-            MilkFoam* y = new MilkFoam(x->get_units());
-            (this->side_items).push_back(y);
-        } else if (ptr_8 != nullptr) {
-            Water* y = new Water(x->get_units());
-            (this->side_items).push_back(y);
+Cappuccino::Cappuccino(const Cappuccino& cap)
+{
+    this->name = cap.name;
+    this->ingredients = {};
+    for(const auto &i: cap.ingredients)
+    {
+        auto p_cinnamon = dynamic_cast<Cinnamon*>(i);
+        if(p_cinnamon)
+        {
+            this->ingredients.push_back(new Cinnamon(*p_cinnamon));
+            continue;
+        }
+        auto p_chocolate = dynamic_cast<Chocolate*>(i);
+        if(p_chocolate)
+        {
+            this->ingredients.push_back(new Chocolate(*p_chocolate));
+            continue;
+        }
+        auto p_sugar = dynamic_cast<Sugar*>(i);
+        if(p_sugar)
+        {
+            this->ingredients.push_back(new Sugar(*p_sugar));
+            continue;
+        }
+        auto p_cookie = dynamic_cast<Cookie*>(i);
+        if(p_cookie)
+        {
+            this->ingredients.push_back(new Cookie(*p_cookie));
+            continue;
+        }
+        auto p_espresso = dynamic_cast<Espresso*>(i);
+        if(p_espresso)
+        {
+            this->ingredients.push_back(new Espresso(*p_espresso));
+            continue;
+        }
+        auto p_milk = dynamic_cast<Milk*>(i);
+        if(p_milk)
+        {
+            this->ingredients.push_back(new Milk(*p_milk));
+            continue;
+        }
+        auto p_milkFoam = dynamic_cast<MilkFoam*>(i);
+        if(p_milkFoam)
+        {
+            this->ingredients.push_back(new MilkFoam(*p_milkFoam));
+            continue;
+        }
+        auto p_water = dynamic_cast<Water*>(i);
+        if(p_water)
+        {
+            this->ingredients.push_back(new Water(*p_water));
+            continue;
+        }
+    }
+    this->side_items = {};
+    for(const auto &i: cap.side_items)
+    {
+        auto p_cinnamon = dynamic_cast<Cinnamon*>(i);
+        if(p_cinnamon)
+        {
+            this->ingredients.push_back(new Cinnamon(*p_cinnamon));
+            continue;
+        }
+        auto p_chocolate = dynamic_cast<Chocolate*>(i);
+        if(p_chocolate)
+        {
+            this->ingredients.push_back(new Chocolate(*p_chocolate));
+            continue;
+        }
+        auto p_sugar = dynamic_cast<Sugar*>(i);
+        if(p_sugar)
+        {
+            this->ingredients.push_back(new Sugar(*p_sugar));
+            continue;
+        }
+        auto p_cookie = dynamic_cast<Cookie*>(i);
+        if(p_cookie)
+        {
+            this->ingredients.push_back(new Cookie(*p_cookie));
+            continue;
+        }
+        auto p_espresso = dynamic_cast<Espresso*>(i);
+        if(p_espresso)
+        {
+            this->ingredients.push_back(new Espresso(*p_espresso));
+            continue;
+        }
+        auto p_milk = dynamic_cast<Milk*>(i);
+        if(p_milk)
+        {
+            this->ingredients.push_back(new Milk(*p_milk));
+            continue;
+        }
+        auto p_milkFoam = dynamic_cast<MilkFoam*>(i);
+        if(p_milkFoam)
+        {
+            this->ingredients.push_back(new MilkFoam(*p_milkFoam));
+            continue;
+        }
+        auto p_water = dynamic_cast<Water*>(i);
+        if(p_water)
+        {
+            this->ingredients.push_back(new Water(*p_water));
+            continue;
         }
     }
 }
 
-void Cappuccino::operator=(const Cappuccino& cap) {
-    if (this != &cap) {
-        this->name = cap.name;
-        for (auto& i : this->side_items) {
-            delete i;
-        }
-        (this->side_items).clear();
-        for (auto x : cap.side_items) {
-            Cinnamon* ptr_1 = dynamic_cast<Cinnamon*>(x);
-            Chocolate* ptr_2 = dynamic_cast<Chocolate*>(x);
-            Sugar* ptr_3 = dynamic_cast<Sugar*>(x);
-            Cookie* ptr_4 = dynamic_cast<Cookie*>(x);
-            Espresso* ptr_5 = dynamic_cast<Espresso*>(x);
-            Milk* ptr_6 = dynamic_cast<Milk*>(x);
-            MilkFoam* ptr_7 = dynamic_cast<MilkFoam*>(x);
-            Water* ptr_8 = dynamic_cast<Water*>(x);
+Cappuccino::~Cappuccino()
+{
+    for(auto &i: this->ingredients)
+    {
+        delete i;
+    }
+    this->ingredients.clear();
+    for(auto &i: this->side_items)
+    {
+        delete i;
+    }
+    this->side_items.clear();
+}
 
-            if (ptr_1 != nullptr) {
-                Cinnamon* y = new Cinnamon(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_2 != nullptr) {
-                Chocolate* y = new Chocolate(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_3 != nullptr) {
-                Sugar* y = new Sugar(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_4 != nullptr) {
-                Cookie* y = new Cookie(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_5 != nullptr) {
-                Espresso* y = new Espresso(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_6 != nullptr) {
-                Milk* y = new Milk(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_7 != nullptr) {
-                MilkFoam* y = new MilkFoam(x->get_units());
-                (this->side_items).push_back(y);
-            } else if (ptr_8 != nullptr) {
-                Water* y = new Water(x->get_units());
-                (this->side_items).push_back(y);
-            }
+void Cappuccino::operator=(const Cappuccino& cap)
+{
+    if(this == &cap)
+        return;
+    this->name = cap.name;
+    this->ingredients = {};
+    for(const auto &i: cap.ingredients)
+    {
+        auto p_cinnamon = dynamic_cast<Cinnamon*>(i);
+        if(p_cinnamon)
+        {
+            this->ingredients.push_back(new Cinnamon(*p_cinnamon));
+            continue;
+        }
+        auto p_chocolate = dynamic_cast<Chocolate*>(i);
+        if(p_chocolate)
+        {
+            this->ingredients.push_back(new Chocolate(*p_chocolate));
+            continue;
+        }
+        auto p_sugar = dynamic_cast<Sugar*>(i);
+        if(p_sugar)
+        {
+            this->ingredients.push_back(new Sugar(*p_sugar));
+            continue;
+        }
+        auto p_cookie = dynamic_cast<Cookie*>(i);
+        if(p_cookie)
+        {
+            this->ingredients.push_back(new Cookie(*p_cookie));
+            continue;
+        }
+        auto p_espresso = dynamic_cast<Espresso*>(i);
+        if(p_espresso)
+        {
+            this->ingredients.push_back(new Espresso(*p_espresso));
+            continue;
+        }
+        auto p_milk = dynamic_cast<Milk*>(i);
+        if(p_milk)
+        {
+            this->ingredients.push_back(new Milk(*p_milk));
+            continue;
+        }
+        auto p_milkFoam = dynamic_cast<MilkFoam*>(i);
+        if(p_milkFoam)
+        {
+            this->ingredients.push_back(new MilkFoam(*p_milkFoam));
+            continue;
+        }
+        auto p_water = dynamic_cast<Water*>(i);
+        if(p_water)
+        {
+            this->ingredients.push_back(new Water(*p_water));
+            continue;
         }
     }
 }
 
-std::string Cappuccino::get_name() { return "Cappuccino"; }
+std::string Cappuccino::get_name()
+{
+    return this->name;
+}
 
-double Cappuccino::price() {
+double Cappuccino::price()
+{
     double price = 0;
-    for (auto x : this->ingredients) {
-        price += x->price();
+    for(const auto &i: this->ingredients)
+    {
+        price += i->price();
     }
-    for (auto x : this->side_items) {
-        price += x->price();
+    for(const auto &i: this->side_items)
+    {
+        price += i->price();
     }
     return price;
 }
 
-void Cappuccino::add_side_item(Ingredient* side) { (this->side_items).push_back(side); }
+void Cappuccino::add_side_item(Ingredient* side)
+{
+    (this->side_items).push_back(side);
+}
+
+std::vector<Ingredient*>& Cappuccino::get_side_items()
+{
+    return this->side_items;
+}
